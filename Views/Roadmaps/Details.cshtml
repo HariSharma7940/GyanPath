@@ -1,0 +1,195 @@
+@model GyanPath.Models.ViewModels.RoadmapDetailsViewModel
+@{
+    ViewData["Title"] = Model.Roadmap.Title + " - Roadmap Details";
+    var domainClass = "domain-" + Model.Roadmap.Domain.ToLower().Replace(" ", "");
+}
+
+<div class="bg-primary text-white py-5 mb-4" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span class="domain-badge @domainClass bg-white">@Model.Roadmap.Domain</span>
+                    <span class="badge bg-light text-dark"><i class="bi bi-bar-chart me-1"></i> @Model.Roadmap.Difficulty</span>
+                    <span class="badge bg-secondary"><i class="bi bi-clock me-1"></i> @Model.Roadmap.EstimatedDuration</span>
+                </div>
+                <h1 class="font-heading text-white fw-bold display-5 mb-3">@Model.Roadmap.Title</h1>
+                <p class="fs-5 opacity-90 mb-4">@Model.Roadmap.Description</p>
+
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    if (Model.IsEnrolled)
+                    {
+                        <div class="bg-white bg-opacity-10 rounded-3 p-3 text-white max-w-500">
+                            <div class="d-flex justify-content-between align-items-center mb-2 small fw-bold">
+                                <span><i class="bi bi-check-circle-fill text-success me-1"></i> Enrolled Status</span>
+                                <span>@Model.CompletionPercentage% Complete (@Model.CompletedLessonsCount / @Model.Lessons.Count Lessons)</span>
+                            </div>
+                            <div class="gp-progress-container" style="height: 12px;">
+                                <div class="gp-progress-bar" style="width: @Model.CompletionPercentage%;"></div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-controller="Roadmaps" asp-action="Enroll" asp-route-id="@Model.Roadmap.RoadmapID" method="post" class="d-inline-block">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-gp-secondary btn-lg font-weight-bold shadow">
+                                <i class="bi bi-plus-circle me-2"></i> Enroll in this Roadmap Free
+                            </button>
+                        </form>
+                    }
+                }
+                else
+                {
+                    <div class="d-flex align-items-center gap-3">
+                        <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path" class="btn btn-gp-secondary btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Login to Enroll & Track Progress
+                        </a>
+                    </div>
+                }
+            </div>
+            <div class="col-lg-4 mt-4 mt-lg-0 text-center">
+                <div class="card border-0 shadow-lg rounded-4 p-4 text-dark text-start bg-white">
+                    <h5 class="fw-bold mb-3 border-bottom pb-2">Roadmap Overview</h5>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <i class="bi bi-journal-check text-primary fs-3"></i>
+                        <div>
+                            <div class="fw-bold fs-6">@Model.Lessons.Count Lessons</div>
+                            <div class="small text-muted">Sequential learning content</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <i class="bi bi-patch-question text-info fs-3"></i>
+                        <div>
+                            <div class="fw-bold fs-6">Interactive MCQ Quizzes</div>
+                            <div class="small text-muted">Instant score validation & attempt logging</div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-briefcase text-success fs-3"></i>
+                        <div>
+                            <div class="fw-bold fs-6">Job Recommendations</div>
+                            <div class="small text-muted">Unlocks relevant Nepal tech opportunities</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        <!-- Main Lessons Timeline -->
+        <div class="col-lg-8">
+            <!-- Learning Objectives -->
+            @if (!string.IsNullOrWhiteSpace(Model.Roadmap.LearningObjectives))
+            {
+                <div class="card shadow-sm border-0 rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="font-heading fw-bold mb-3 text-primary"><i class="bi bi-check2-circle me-2"></i> What You Will Learn</h4>
+                        <div class="row g-2">
+                            @foreach (var obj in Model.Roadmap.LearningObjectives.Split(';'))
+                            {
+                                if (!string.IsNullOrWhiteSpace(obj))
+                                {
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-start gap-2 small text-secondary">
+                                            <i class="bi bi-arrow-right-circle-fill text-teal mt-1"></i>
+                                            <span>@obj.Trim()</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <h3 class="font-heading fw-bold mb-3"><i class="bi bi-list-ol text-primary me-2"></i> Roadmap Curriculum & Lessons</h3>
+
+            @if (Model.Lessons.Count == 0)
+            {
+                <div class="alert alert-info border-0 rounded-4 p-4 text-center">
+                    <i class="bi bi-info-circle fs-3 d-block mb-2"></i>
+                    No lessons have been published for this roadmap yet.
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var lesson in Model.Lessons)
+                    {
+                        <div class="card shadow-sm border-0 rounded-4 transition-hover">
+                            <div class="card-body p-4 d-flex align-items-center justify-content-between gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="stat-icon @(lesson.IsCompletedByUser ? "stat-icon-teal" : "stat-icon-blue") fw-bold fs-5">
+                                        @if (lesson.IsCompletedByUser)
+                                        {
+                                            <i class="bi bi-check-lg text-success"></i>
+                                        }
+                                        else
+                                        {
+                                            @lesson.LessonOrder
+                                        }
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-1">
+                                            <a asp-controller="Lessons" asp-action="Details" asp-route-id="@lesson.LessonID" class="text-decoration-none text-dark">
+                                                @lesson.Title
+                                            </a>
+                                        </h5>
+                                        <p class="text-muted small mb-0">@lesson.Description</p>
+                                    </div>
+                                </div>
+                                <div class="text-end flex-shrink-0">
+                                    @if (lesson.IsCompletedByUser)
+                                    {
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 mb-2 d-block">
+                                            <i class="bi bi-check-circle-fill me-1"></i> Completed
+                                        </span>
+                                    }
+                                    <a asp-controller="Lessons" asp-action="Details" asp-route-id="@lesson.LessonID" class="btn btn-outline-primary btn-sm px-3">
+                                        Open Lesson <i class="bi bi-chevron-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Sidebar: Related Job Opportunities -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+                <h5 class="fw-bold mb-3 font-heading border-bottom pb-2">
+                    <i class="bi bi-briefcase text-primary me-2"></i> Related Job Opportunities
+                </h5>
+                <p class="small text-muted mb-3">Complete this roadmap to unlock these domain opportunities in Nepal.</p>
+
+                @if (Model.RelatedJobs.Count == 0)
+                {
+                    <p class="text-muted small">No related opportunities posted for this domain currently.</p>
+                }
+                else
+                {
+                    <div class="d-flex flex-column gap-3">
+                        @foreach (var job in Model.RelatedJobs)
+                        {
+                            <div class="p-3 border rounded-3 bg-light">
+                                <h6 class="fw-bold mb-1"><a asp-controller="Jobs" asp-action="Details" asp-route-id="@job.JobID" class="text-decoration-none text-dark">@job.Title</a></h6>
+                                <p class="small text-muted mb-1"><i class="bi bi-building me-1"></i> @job.Company</p>
+                                <div class="d-flex justify-content-between align-items-center text-muted extra-small">
+                                    <span><i class="bi bi-geo-alt me-1"></i> @job.Location</span>
+                                    <span class="badge bg-secondary">@job.JobType</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

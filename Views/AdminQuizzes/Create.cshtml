@@ -1,0 +1,62 @@
+@model GyanPath.Models.Question
+@{
+    ViewData["Title"] = "Add Quiz Question - Admin";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-3 col-xl-2 mb-4 mb-lg-0">
+            <partial name="_AdminSidebarPartial" />
+        </div>
+
+        <div class="col-lg-9 col-xl-10">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 max-w-700">
+                <h2 class="font-heading fw-bold mb-4"><i class="bi bi-plus-circle text-primary me-2"></i> Add MCQ Question</h2>
+
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 small mb-3"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Target Lesson</label>
+                        <select asp-for="LessonID" asp-items="ViewBag.LessonID" class="form-select" required></select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="QuestionText" class="form-label fw-semibold"></label>
+                        <textarea asp-for="QuestionText" class="form-control" rows="2" placeholder="e.g. Which HTML tag specifies the main content?" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Explanation" class="form-label fw-semibold">Answer Explanation (Optional)</label>
+                        <textarea asp-for="Explanation" class="form-control" rows="2" placeholder="Explanation for learning review..."></textarea>
+                    </div>
+
+                    <hr class="my-4" />
+                    <h5 class="fw-bold mb-3 font-heading text-secondary"><i class="bi bi-list-check me-2"></i> Multiple Choice Options</h5>
+
+                    @for (int i = 0; i < 4; i++)
+                    {
+                        var optText = i < Model.Options.Count ? Model.Options[i].OptionText : "";
+                        var isChecked = i == 0 ? "checked" : "";
+                        <div class="mb-3 p-3 bg-light rounded border">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <input type="radio" name="correctOptionIndex" value="@i" @isChecked class="form-check-input" id="correct_@i" />
+                                <label class="form-check-label fw-semibold text-primary" for="correct_@i">
+                                    Option @(i + 1) @(i == 0 ? "(Marked as Correct Answer by default)" : "")
+                                </label>
+                            </div>
+                            <input type="text" name="optionTexts" value="@optText" class="form-control" placeholder="Enter choice text for option @(i + 1)" required />
+                        </div>
+                    }
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-gp-primary"><i class="bi bi-save me-1"></i> Save Question</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

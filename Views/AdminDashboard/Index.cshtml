@@ -1,0 +1,176 @@
+@model GyanPath.Models.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Panel Overview";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 col-xl-2 mb-4 mb-lg-0">
+            <partial name="_AdminSidebarPartial" />
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="col-lg-9 col-xl-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <span class="badge bg-danger text-white px-3 py-1 rounded-pill mb-1"><i class="bi bi-shield-lock me-1"></i> Administrator Module</span>
+                    <h2 class="font-heading fw-bold mb-0">System Control Panel & Statistics</h2>
+                </div>
+            </div>
+
+            <!-- Stats Overview Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6 col-md-4 col-xl-2">
+                    <div class="stat-card p-3">
+                        <div class="stat-icon stat-icon-blue fs-4" style="width: 44px; height: 44px;">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted extra-small d-block">Total Users</span>
+                            <h4 class="fw-bold mb-0">@Model.TotalUsers</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-xl-2">
+                    <div class="stat-card p-3">
+                        <div class="stat-icon stat-icon-purple fs-4" style="width: 44px; height: 44px;">
+                            <i class="bi bi-compass-fill"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted extra-small d-block">Roadmaps</span>
+                            <h4 class="fw-bold mb-0">@Model.TotalRoadmaps</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-xl-2">
+                    <div class="stat-card p-3">
+                        <div class="stat-icon stat-icon-teal fs-4" style="width: 44px; height: 44px;">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted extra-small d-block">Lessons</span>
+                            <h4 class="fw-bold mb-0">@Model.TotalLessons</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-xl-2">
+                    <div class="stat-card p-3">
+                        <div class="stat-icon stat-icon-amber fs-4" style="width: 44px; height: 44px;">
+                            <i class="bi bi-person-check-fill"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted extra-small d-block">Enrollments</span>
+                            <h4 class="fw-bold mb-0">@Model.TotalEnrollments</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-xl-2">
+                    <div class="stat-card p-3">
+                        <div class="stat-icon stat-icon-blue fs-4" style="width: 44px; height: 44px;">
+                            <i class="bi bi-patch-question-fill"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted extra-small d-block">Quiz Attempts</span>
+                            <h4 class="fw-bold mb-0">@Model.TotalQuizAttempts</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-xl-2">
+                    <div class="stat-card p-3">
+                        <div class="stat-icon stat-icon-teal fs-4" style="width: 44px; height: 44px;">
+                            <i class="bi bi-briefcase-fill"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted extra-small d-block">Job Listings</span>
+                            <h4 class="fw-bold mb-0">@Model.TotalJobs</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent System Tables -->
+            <div class="row g-4">
+                <div class="col-xl-6">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 font-heading"><i class="bi bi-person-plus-fill text-primary me-2"></i> Recent Registered Users</h5>
+                            <a asp-controller="AdminUsers" asp-action="Index" class="btn btn-outline-primary btn-sm">Manage Users</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle small mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Domain</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var u in Model.RecentUsers)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">@u.FullName</td>
+                                            <td>@u.Email</td>
+                                            <td>
+                                                <span class="badge @(u.Role == "Admin" ? "bg-danger" : "bg-primary")">@u.Role</span>
+                                            </td>
+                                            <td><span class="badge bg-secondary">@u.PreferredDomain</span></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 font-heading"><i class="bi bi-patch-question-fill text-info me-2"></i> Recent Quiz Attempts</h5>
+                            <a asp-controller="AdminQuizzes" asp-action="Index" class="btn btn-outline-primary btn-sm">Manage Quizzes</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle small mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Lesson</th>
+                                        <th>Score</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var qa in Model.RecentQuizAttempts)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">@qa.UserFullName</td>
+                                            <td>@qa.LessonTitle</td>
+                                            <td class="fw-bold">@qa.ScorePercentage%</td>
+                                            <td>
+                                                @if (qa.Passed)
+                                                {
+                                                    <span class="badge bg-success"><i class="bi bi-check me-1"></i> Pass</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning text-dark"><i class="bi bi-x me-1"></i> Fail</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

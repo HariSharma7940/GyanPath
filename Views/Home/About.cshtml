@@ -1,0 +1,75 @@
+@{
+    ViewData["Title"] = "About GyanPath - Project Overview";
+}
+
+<div class="container py-5">
+    <div class="row mb-5 text-center">
+        <div class="col-lg-8 mx-auto">
+            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold mb-2">CT050-3-2-WAPP Academic Project</span>
+            <h1 class="font-heading display-5">About GyanPath</h1>
+            <p class="lead text-muted">A database-driven career learning platform built for university students and fresh graduates in Nepal.</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="stat-icon stat-icon-blue">
+                        <i class="bi bi-bullseye"></i>
+                    </div>
+                    <h3 class="h4 mb-0 fw-bold">Project Vision & Objective</h3>
+                </div>
+                <p class="text-muted">
+                    Many fresh university graduates in Nepal face a disconnect between theoretical academic concepts taught in colleges and practical skillsets required by modern technology, design, and business employers.
+                </p>
+                <p class="text-muted mb-0">
+                    <strong>GyanPath</strong> provides structured domain-based roadmaps, lesson materials, video demonstrations, MCQ assessments, real progress tracking, and rule-based job recommendations to bridge this gap.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="stat-icon stat-icon-teal">
+                        <i class="bi bi-stack"></i>
+                    </div>
+                    <h3 class="h4 mb-0 fw-bold">Approved Technology Stack</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent px-0 border-bottom"><i class="bi bi-check2-square text-primary me-2"></i> <strong>Backend Framework:</strong> ASP.NET Core 9.0 (C# MVC)</li>
+                    <li class="list-group-item bg-transparent px-0 border-bottom"><i class="bi bi-check2-square text-primary me-2"></i> <strong>Database System:</strong> Microsoft SQL Server</li>
+                    <li class="list-group-item bg-transparent px-0 border-bottom"><i class="bi bi-check2-square text-primary me-2"></i> <strong>Data Connectivity:</strong> Pure ADO.NET (SqlConnection, SqlCommand, SqlDataReader)</li>
+                    <li class="list-group-item bg-transparent px-0 border-bottom"><i class="bi bi-check2-square text-primary me-2"></i> <strong>Frontend Styling:</strong> External CSS3 & Bootstrap 5</li>
+                    <li class="list-group-item bg-transparent px-0"><i class="bi bi-check2-square text-primary me-2"></i> <strong>Client Scripts:</strong> Native Vanilla JavaScript</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Architecture & Security -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-5">
+        <h3 class="h4 fw-bold mb-4 font-heading"><i class="bi bi-shield-check text-success me-2"></i> Key Features & System Capabilities</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="p-3 border rounded-3 bg-light h-100">
+                    <h5 class="fw-bold fs-6"><i class="bi bi-lock me-2 text-primary"></i> Secure Password Hashing</h5>
+                    <p class="small text-muted mb-0">Passwords are salted and hashed using standard PBKDF2 with SHA256 before storing in SQL Server.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 border rounded-3 bg-light h-100">
+                    <h5 class="fw-bold fs-6"><i class="bi bi-database-check me-2 text-primary"></i> ADO.NET CRUD</h5>
+                    <p class="small text-muted mb-0">Full parameterized INSERT, SELECT, UPDATE, DELETE queries protecting against SQL injection attacks.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 border rounded-3 bg-light h-100">
+                    <h5 class="fw-bold fs-6"><i class="bi bi-card-checklist me-2 text-primary"></i> MCQ Quiz Engine</h5>
+                    <p class="small text-muted mb-0">Calculates scores server-side and stores attempt history in the database to track learner progression.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

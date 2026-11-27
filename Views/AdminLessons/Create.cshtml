@@ -1,0 +1,65 @@
+@model GyanPath.Models.Lesson
+@{
+    ViewData["Title"] = "Add Lesson - Admin";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-3 col-xl-2 mb-4 mb-lg-0">
+            <partial name="_AdminSidebarPartial" />
+        </div>
+
+        <div class="col-lg-9 col-xl-10">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 max-w-700">
+                <h2 class="font-heading fw-bold mb-4"><i class="bi bi-plus-circle text-primary me-2"></i> Add New Lesson</h2>
+
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 small mb-3"></div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold">Target Roadmap</label>
+                            <select asp-for="RoadmapID" asp-items="ViewBag.RoadmapID" class="form-select" required></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="LessonOrder" class="form-label fw-semibold"></label>
+                            <input asp-for="LessonOrder" type="number" min="1" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label fw-semibold"></label>
+                        <input asp-for="Title" class="form-control" placeholder="e.g. Lesson 1: HTML5 Fundamentals" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold"></label>
+                        <input asp-for="Description" class="form-control" placeholder="Short lesson summary..." required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="VideoUrl" class="form-label fw-semibold">YouTube Embed URL (Optional)</label>
+                        <input asp-for="VideoUrl" class="form-control" placeholder="e.g. https://www.youtube.com/embed/mU6anWqZJcc" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Content" class="form-label fw-semibold">Lesson Main Content</label>
+                        <textarea asp-for="Content" class="form-control" rows="8" placeholder="Detailed lesson tutorial content..." required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Resources" class="form-label fw-semibold">External Resources</label>
+                        <textarea asp-for="Resources" class="form-control" rows="2" placeholder="Reference documentation links..."></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-gp-primary"><i class="bi bi-save me-1"></i> Save Lesson</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

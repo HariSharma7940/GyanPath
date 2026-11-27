@@ -1,0 +1,61 @@
+@model GyanPath.Models.Lesson
+@{
+    ViewData["Title"] = "Quiz: " + Model.Title;
+    var roadmap = ViewBag.Roadmap as GyanPath.Models.Roadmap;
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-primary-subtle text-primary px-3 py-2 fw-semibold">Assessment MCQ</span>
+                    <span class="badge bg-info-subtle text-info-emphasis px-3 py-2 fw-semibold">Passing Threshold: 60%</span>
+                </div>
+
+                <h2 class="font-heading fw-bold mb-2">Quiz Assessment: @Model.Title</h2>
+                <p class="text-muted small mb-0">Select the best answer for each question and submit when ready.</p>
+            </div>
+
+            <form asp-controller="Quiz" asp-action="Submit" method="post" id="gyanpathQuizForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="LessonID" value="@Model.LessonID" />
+
+                @{ int qIndex = 1; }
+                @foreach (var q in Model.Questions)
+                {
+                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 question-group">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge bg-primary text-white rounded-circle p-2 fs-6" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">@qIndex</span>
+                            <h5 class="fw-bold mb-0 text-dark">@q.QuestionText</h5>
+                        </div>
+
+                        <div class="d-flex flex-column gap-2 ps-4 ms-2">
+                            @foreach (var opt in q.Options)
+                            {
+                                <label class="quiz-option-card d-flex align-items-center gap-3 m-0">
+                                    <input type="radio" name="question_@q.QuestionID" value="@opt.OptionID" class="form-check-input flex-shrink-0" />
+                                    <span class="fw-medium text-secondary">@opt.OptionText</span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                    qIndex++;
+                }
+
+                <div class="d-flex justify-content-between align-items-center mt-4 mb-5">
+                    <a asp-controller="Lessons" asp-action="Details" asp-route-id="@Model.LessonID" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Return to Lesson
+                    </a>
+                    <button type="submit" class="btn btn-gp-primary btn-lg font-weight-bold px-4">
+                        <i class="bi bi-send-check me-2"></i> Submit Quiz Answers
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/quiz.js" asp-append-version="true"></script>
+}

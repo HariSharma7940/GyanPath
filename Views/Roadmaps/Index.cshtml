@@ -1,0 +1,95 @@
+@model List<GyanPath.Models.Roadmap>
+@{
+    ViewData["Title"] = "Explore Career Roadmaps";
+    string currentSearch = ViewBag.CurrentSearch as string ?? "";
+    string currentDomain = ViewBag.CurrentDomain as string ?? "All";
+    string currentDifficulty = ViewBag.CurrentDifficulty as string ?? "All";
+}
+
+<div class="bg-primary text-white py-4 mb-4" style="background: linear-gradient(135deg, #0f172a, #1e3a8a);">
+    <div class="container">
+        <h1 class="font-heading text-white fw-bold display-6 mb-2">Explore Career Learning Roadmaps</h1>
+        <p class="opacity-90 mb-0">Browse structured, domain-tailored learning pathways to build practical skills.</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Search & Filter Controls -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body p-4">
+            <form asp-controller="Roadmaps" asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold small text-muted">Search Keywords</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" class="form-control" placeholder="Search title or description..." value="@currentSearch">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold small text-muted">Filter Domain</label>
+                    <select name="domain" class="form-select">
+                        <option value="All" selected="@(currentDomain == "All")">All Domains</option>
+                        <option value="Technology" selected="@(currentDomain == "Technology")">Technology</option>
+                        <option value="Design" selected="@(currentDomain == "Design")">Design</option>
+                        <option value="Business" selected="@(currentDomain == "Business")">Business</option>
+                        <option value="Creative Arts" selected="@(currentDomain == "Creative Arts")">Creative Arts</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold small text-muted">Difficulty Level</label>
+                    <select name="difficulty" class="form-select">
+                        <option value="All" selected="@(currentDifficulty == "All")">All Levels</option>
+                        <option value="Beginner" selected="@(currentDifficulty == "Beginner")">Beginner</option>
+                        <option value="Intermediate" selected="@(currentDifficulty == "Intermediate")">Intermediate</option>
+                        <option value="Advanced" selected="@(currentDifficulty == "Advanced")">Advanced</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-gp-primary w-100">
+                        <i class="bi bi-funnel me-1"></i> Filter
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary" title="Reset Filters"><i class="bi bi-arrow-counterclockwise"></i></a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Roadmaps Cards List -->
+    @if (Model.Count == 0)
+    {
+        <div class="text-center py-5 bg-white rounded-4 border">
+            <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+            <h4 class="fw-bold text-muted">No roadmaps found matching your filters.</h4>
+            <p class="text-muted small">Try adjusting your search terms or clearing filters.</p>
+            <a asp-action="Index" class="btn btn-outline-primary btn-sm mt-2">Reset Filters</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                var domainClass = "domain-" + item.Domain.ToLower().Replace(" ", "");
+                <div class="col-md-6 col-lg-4">
+                    <div class="gp-card">
+                        <div class="gp-card-body d-flex flex-column h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="domain-badge @domainClass">@item.Domain</span>
+                                <span class="badge bg-light text-dark border"><i class="bi bi-bar-chart me-1"></i> @item.Difficulty</span>
+                            </div>
+                            <h3 class="fw-bold mb-2 fs-5">@item.Title</h3>
+                            <p class="text-muted small mb-3 flex-grow-1">@item.Description</p>
+                            <div class="d-flex justify-content-between align-items-center text-muted small mb-3 pt-2 border-top">
+                                <span><i class="bi bi-clock me-1"></i> @item.EstimatedDuration</span>
+                                <span><i class="bi bi-journal-text me-1"></i> @item.LessonCount Lessons</span>
+                            </div>
+                            <a asp-action="Details" asp-route-id="@item.RoadmapID" class="btn btn-gp-primary w-100 mt-auto">
+                                View Roadmap Details <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

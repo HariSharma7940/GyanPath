@@ -1,0 +1,68 @@
+@model List<GyanPath.Models.JobOpportunity>
+@{
+    ViewData["Title"] = "Manage Jobs - Admin Panel";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-3 col-xl-2 mb-4 mb-lg-0">
+            <partial name="_AdminSidebarPartial" />
+        </div>
+
+        <div class="col-lg-9 col-xl-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="font-heading fw-bold mb-1"><i class="bi bi-briefcase-fill text-primary me-2"></i> Job & Internship Management</h2>
+                    <p class="text-muted small mb-0">Create, view, update, and remove career opportunities matched for learner recommendations.</p>
+                </div>
+                <a asp-action="Create" class="btn btn-gp-primary">
+                    <i class="bi bi-plus-lg me-1"></i> Add Job Opportunity
+                </a>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Company</th>
+                                    <th>Domain</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var job in Model)
+                                {
+                                    <tr>
+                                        <td><code>#@job.JobID</code></td>
+                                        <td class="fw-semibold">@job.Title</td>
+                                        <td><i class="bi bi-building me-1 text-muted"></i> @job.Company</td>
+                                        <td><span class="domain-badge domain-@job.Domain.ToLower().Replace(" ", "")">@job.Domain</span></td>
+                                        <td><span class="badge bg-secondary">@job.JobType</span></td>
+                                        <td class="small text-muted">@job.Location</td>
+                                        <td class="text-end">
+                                            <a asp-action="Edit" asp-route-id="@job.JobID" class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="bi bi-pencil me-1"></i> Edit
+                                            </a>
+                                            <form asp-action="Delete" asp-route-id="@job.JobID" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-outline-danger confirm-delete-btn" data-item-name="@job.Title">
+                                                    <i class="bi bi-trash me-1"></i> Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

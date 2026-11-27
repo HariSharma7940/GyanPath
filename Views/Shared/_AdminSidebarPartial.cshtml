@@ -1,0 +1,44 @@
+<div class="admin-sidebar rounded-4 mb-4 mb-lg-0">
+    <div class="sidebar-title">System Admin Panel</div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AdminDashboard" ? "active" : "")" asp-controller="AdminDashboard" asp-action="Index">
+                <i class="bi bi-speedometer2"></i> Dashboard Overview
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AdminUsers" ? "active" : "")" asp-controller="AdminUsers" asp-action="Index">
+                <i class="bi bi-people-fill"></i> Users Management
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AdminRoadmaps" ? "active" : "")" asp-controller="AdminRoadmaps" asp-action="Index">
+                <i class="bi bi-compass-fill"></i> Roadmaps Management
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AdminLessons" ? "active" : "")" asp-controller="AdminLessons" asp-action="Index">
+                <i class="bi bi-journal-bookmark-fill"></i> Lessons Management
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AdminQuizzes" ? "active" : "")" asp-controller="AdminQuizzes" asp-action="Index">
+                <i class="bi bi-patch-question-fill"></i> Quizzes Management
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AdminJobs" ? "active" : "")" asp-controller="AdminJobs" asp-action="Index">
+                <i class="bi bi-briefcase-fill"></i> Jobs Management
+            </a>
+        </li>
+    </ul>
+
+    <div class="sidebar-title mt-4">Quick Links</div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link text-warning" asp-controller="Dashboard" asp-action="Index">
+                <i class="bi bi-eye-fill"></i> View Learner View
+            </a>
+        </li>
+    </ul>
+</div>

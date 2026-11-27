@@ -1,0 +1,212 @@
+@{
+    ViewData["Title"] = "Home - Career Learning Platform for Nepal";
+    var featuredRoadmaps = ViewBag.FeaturedRoadmaps as List<GyanPath.Models.Roadmap> ?? new List<GyanPath.Models.Roadmap>();
+    var featuredJobs = ViewBag.FeaturedJobs as List<GyanPath.Models.JobOpportunity> ?? new List<GyanPath.Models.JobOpportunity>();
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="hero-badge"><i class="bi bi-stars me-1"></i> Structured Career Pathways for Nepal</span>
+                <h1 class="hero-title">Your Path to Skills, Careers & Opportunities</h1>
+                <p class="hero-subtitle">
+                    GyanPath bridges the gap between university education and practical industry demand. Follow structured roadmaps, complete MCQ assessments, and unlock tailored job & internship recommendations.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-controller="Roadmaps" asp-action="Index" class="btn btn-gp-secondary btn-lg">
+                        <i class="bi bi-compass me-2"></i> Explore Roadmaps
+                    </a>
+                    @if (User.Identity == null || !User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-person-plus me-2"></i> Join GyanPath Free
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-grid-1x2 me-2"></i> Go to Dashboard
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-5 mt-5 mt-lg-0 text-center">
+                <div class="p-4 rounded-4 shadow-lg bg-white text-dark text-start border border-light">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="stat-icon stat-icon-blue">
+                            <i class="bi bi-mortarboard-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">Academic to Career</h5>
+                            <small class="text-muted">Targeted for Nepal Fresh Graduates</small>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="py-2 border-bottom d-flex align-items-center gap-2">
+                            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                            <span>4 Major Domains: Tech, Design, Business, Creative</span>
+                        </li>
+                        <li class="py-2 border-bottom d-flex align-items-center gap-2">
+                            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                            <span>Interactive Video & MCQ Quizzes</span>
+                        </li>
+                        <li class="py-2 border-bottom d-flex align-items-center gap-2">
+                            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                            <span>Real Database Progress Tracking</span>
+                        </li>
+                        <li class="py-2 d-flex align-items-center gap-2">
+                            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                            <span>Rule-Based Job Recommendations</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Career Domains Section -->
+<section class="py-5 container">
+    <div class="text-center mb-5">
+        <h2 class="font-heading fs-2">Explore Career Domains</h2>
+        <p class="text-muted">Choose your domain of interest and follow step-by-step practical learning roadmaps.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Roadmaps" asp-action="Index" asp-route-domain="Technology" class="text-decoration-none">
+                <div class="gp-card text-center p-4">
+                    <div class="stat-icon stat-icon-blue mx-auto mb-3">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
+                    <h5 class="fw-bold">Technology</h5>
+                    <p class="text-muted small mb-0">Full-Stack Web Dev, C# Software Engineering, Database Systems</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Roadmaps" asp-action="Index" asp-route-domain="Design" class="text-decoration-none">
+                <div class="gp-card text-center p-4">
+                    <div class="stat-icon stat-icon-purple mx-auto mb-3">
+                        <i class="bi bi-palette"></i>
+                    </div>
+                    <h5 class="fw-bold">Design</h5>
+                    <p class="text-muted small mb-0">UI/UX Design, Figma Prototyping, Wireframing, Graphic Design</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Roadmaps" asp-action="Index" asp-route-domain="Business" class="text-decoration-none">
+                <div class="gp-card text-center p-4">
+                    <div class="stat-icon stat-icon-teal mx-auto mb-3">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <h5 class="fw-bold">Business</h5>
+                    <p class="text-muted small mb-0">Digital Marketing, SEO, Web Analytics, Social Media Strategy</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a asp-controller="Roadmaps" asp-action="Index" asp-route-domain="Creative Arts" class="text-decoration-none">
+                <div class="gp-card text-center p-4">
+                    <div class="stat-icon stat-icon-amber mx-auto mb-3">
+                        <i class="bi bi-camera-reels"></i>
+                    </div>
+                    <h5 class="fw-bold">Creative Arts</h5>
+                    <p class="text-muted small mb-0">Video Production, Content Strategy, Scriptwriting, Personal Branding</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Roadmaps Section -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h2 class="font-heading fs-2 mb-1">Featured Roadmaps</h2>
+                <p class="text-muted mb-0">Handcrafted structured learning paths to kickstart your career.</p>
+            </div>
+            <a asp-controller="Roadmaps" asp-action="Index" class="btn btn-gp-outline">View All Roadmaps <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var rm in featuredRoadmaps)
+            {
+                var domainClass = "domain-" + rm.Domain.ToLower().Replace(" ", "");
+                <div class="col-md-6 col-lg-4">
+                    <div class="gp-card">
+                        <div class="gp-card-body d-flex flex-column h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="domain-badge @domainClass">@rm.Domain</span>
+                                <span class="badge bg-light text-dark border"><i class="bi bi-bar-chart me-1"></i> @rm.Difficulty</span>
+                            </div>
+                            <h4 class="fw-bold mb-2 fs-5">@rm.Title</h4>
+                            <p class="text-muted small mb-3 flex-grow-1">@rm.Description</p>
+                            <div class="d-flex justify-content-between align-items-center text-muted small mb-3 pt-2 border-top">
+                                <span><i class="bi bi-clock me-1"></i> @rm.EstimatedDuration</span>
+                                <span><i class="bi bi-book me-1"></i> @rm.LessonCount Lessons</span>
+                            </div>
+                            <a asp-controller="Roadmaps" asp-action="Details" asp-route-id="@rm.RoadmapID" class="btn btn-gp-primary w-100 mt-auto">
+                                View Details & Lessons <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- How GyanPath Works Section -->
+<section class="py-5 container">
+    <div class="text-center mb-5">
+        <h2 class="font-heading fs-2">How GyanPath Works</h2>
+        <p class="text-muted">A clear, 4-step journey from learning to landing your career opportunity.</p>
+    </div>
+
+    <div class="row g-4 text-center">
+        <div class="col-md-3">
+            <div class="p-4 rounded-4 bg-white border h-100">
+                <div class="stat-icon stat-icon-blue mx-auto mb-3 fw-bold fs-4">1</div>
+                <h5 class="fw-bold">Choose a Domain</h5>
+                <p class="text-muted small mb-0">Select from Technology, Design, Business, or Creative Arts.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-4 rounded-4 bg-white border h-100">
+                <div class="stat-icon stat-icon-teal mx-auto mb-3 fw-bold fs-4">2</div>
+                <h5 class="fw-bold">Follow Lessons</h5>
+                <p class="text-muted small mb-0">Study structured text content and embedded educational video guides.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-4 rounded-4 bg-white border h-100">
+                <div class="stat-icon stat-icon-purple mx-auto mb-3 fw-bold fs-4">3</div>
+                <h5 class="fw-bold">Pass Assessments</h5>
+                <p class="text-muted small mb-0">Complete MCQ quizzes for each lesson and track your score in real-time.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-4 rounded-4 bg-white border h-100">
+                <div class="stat-icon stat-icon-amber mx-auto mb-3 fw-bold fs-4">4</div>
+                <h5 class="fw-bold">Get Recommended</h5>
+                <p class="text-muted small mb-0">Receive domain-matched job & internship recommendations in Nepal.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-5 text-white" style="background: linear-gradient(135deg, var(--gp-primary), var(--gp-secondary));">
+    <div class="container text-center py-4">
+        <h2 class="font-heading text-white display-6 mb-3">Ready to Upgrade Your Practical Career Skills?</h2>
+        <p class="fs-5 opacity-90 mb-4 max-w-700 mx-auto">Register for free and start following structured learning roadmaps built for students in Nepal.</p>
+        <a asp-controller="Account" asp-action="Register" class="btn btn-light text-primary btn-lg font-weight-bold px-4">
+            <i class="bi bi-person-plus me-2"></i> Create Account Now
+        </a>
+    </div>
+</section>

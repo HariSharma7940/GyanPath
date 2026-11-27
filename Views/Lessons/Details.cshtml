@@ -1,0 +1,166 @@
+@model GyanPath.Models.Lesson
+@{
+    ViewData["Title"] = Model.Title;
+    var roadmap = ViewBag.Roadmap as GyanPath.Models.Roadmap;
+    var prevLesson = ViewBag.PrevLesson as GyanPath.Models.Lesson;
+    var nextLesson = ViewBag.NextLesson as GyanPath.Models.Lesson;
+    bool hasQuiz = ViewBag.HasQuiz ?? false;
+    int questionCount = ViewBag.QuestionCount ?? 0;
+}
+
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb bg-white p-3 rounded-3 shadow-sm border mb-0">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Roadmaps" asp-action="Index">Roadmaps</a></li>
+            @if (roadmap != null)
+            {
+                <li class="breadcrumb-item"><a asp-controller="Roadmaps" asp-action="Details" asp-route-id="@roadmap.RoadmapID">@roadmap.Title</a></li>
+            }
+            <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-primary-subtle text-primary px-3 py-2 fw-semibold">Lesson Order #@Model.LessonOrder</span>
+                    @if (Model.IsCompletedByUser)
+                    {
+                        <span class="badge bg-success text-white px-3 py-2 fw-semibold">
+                            <i class="bi bi-check-circle-fill me-1"></i> Completed
+                        </span>
+                    }
+                </div>
+
+                <h1 class="font-heading fw-bold mb-3">@Model.Title</h1>
+                <p class="lead text-muted mb-4 fs-6">@Model.Description</p>
+
+                <!-- YouTube Embedded Video if available -->
+                @if (!string.IsNullOrWhiteSpace(Model.VideoUrl))
+                {
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-2"><i class="bi bi-play-btn-fill text-danger me-2"></i> Lesson Video Guide</h5>
+                        <div class="video-container">
+                            <iframe src="@Model.VideoUrl" title="@Model.Title" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                }
+
+                <hr class="my-4" />
+
+                <!-- Text Content -->
+                <div class="lesson-content mb-4">
+                    @Html.Raw(Model.Content.Replace("\n", "<br />"))
+                </div>
+
+                <!-- Learning Resources -->
+                @if (!string.IsNullOrWhiteSpace(Model.Resources))
+                {
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-link-45deg text-primary fs-5"></i> Recommended Reading & Resources</h6>
+                        <p class="small text-muted mb-0">@Model.Resources</p>
+                    </div>
+                }
+
+                <!-- Lesson Actions Toolbar -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top">
+                    <div>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            if (!Model.IsCompletedByUser)
+                            {
+                                <form asp-controller="Lessons" asp-action="Complete" asp-route-id="@Model.LessonID" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-success font-weight-bold">
+                                        <i class="bi bi-check2-circle me-1"></i> Mark as Completed
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-success fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Lesson Marked Completed</span>
+                            }
+                        }
+                    </div>
+
+                    <div>
+                        @if (hasQuiz)
+                        {
+                            <a asp-controller="Quiz" asp-action="Start" asp-route-id="@Model.LessonID" class="btn btn-gp-primary">
+                                <i class="bi bi-patch-question-fill me-1"></i> Take Lesson Quiz (@questionCount Questions)
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted small">No quiz for this lesson</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                @if (prevLesson != null)
+                {
+                    <a asp-controller="Lessons" asp-action="Details" asp-route-id="@prevLesson.LessonID" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Prev: @prevLesson.Title
+                    </a>
+                }
+                else
+                {
+                    <div></div>
+                }
+
+                @if (nextLesson != null)
+                {
+                    <a asp-controller="Lessons" asp-action="Details" asp-route-id="@nextLesson.LessonID" class="btn btn-outline-primary">
+                        Next: @nextLesson.Title <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <!-- Sidebar: Lesson Info -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 rounded-4 p-4 sticky-top" style="top: 90px;">
+                <h5 class="fw-bold mb-3 font-heading border-bottom pb-2">Lesson Information</h5>
+
+                <div class="mb-3">
+                    <span class="text-muted small d-block mb-1">Parent Roadmap</span>
+                    @if (roadmap != null)
+                    {
+                        <strong class="d-block text-primary">@roadmap.Title</strong>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <span class="text-muted small d-block mb-1">Quiz Status</span>
+                    @if (Model.UserPassedQuiz)
+                    {
+                        <span class="badge bg-success text-white"><i class="bi bi-award-fill me-1"></i> Passed (@Model.LastQuizScore%)</span>
+                    }
+                    else if (Model.LastQuizScore.HasValue)
+                    {
+                        <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i> Score: @Model.LastQuizScore% (Retry needed)</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Not Attempted Yet</span>
+                    }
+                </div>
+
+                <div class="pt-3 border-top">
+                    @if (roadmap != null)
+                    {
+                        <a asp-controller="Roadmaps" asp-action="Details" asp-route-id="@roadmap.RoadmapID" class="btn btn-outline-secondary w-100 btn-sm">
+                            <i class="bi bi-list-ul me-1"></i> View Full Roadmap Curriculum
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
